@@ -1,0 +1,54 @@
+.
+├── client
+│   ├── c
+│   ├── client.c
+│   ├── fun
+│   │   └── menu.c
+│   ├── Makefile
+│   ├── my.h
+│   └── net
+│       └── net.c
+├── readme
+└── server
+    ├── fun
+    │   └── deal.c
+    ├── Makefile
+    ├── my.h
+    ├── net
+    │   └── net.c
+    ├── s
+    ├── server.c
+    ├── us
+    └── user.db
+
+6 directories, 15 files
+
+初始登录名：root
+密码：123
+
+员工管理系统：
+客户端（client文件夹）：
+	client.c 客户端主体逻辑框架，menu.c特定的功能界面函数，net.c关于网络的搭建
+	2种结构体，USER和INFO
+	USER用于存放基本信息如姓名，密码和用户权限，同时把客户端命令封装在此结构体
+	INFO单纯用于存放每个员工的基本详细信息，用于服务器向客户端返回想要的数据
+	根据权限不同分为root和guest用户，每种用户的功能不同
+	root菜单：修改信息，退出，查询信息，增加用户（员工类型只能为root或guest），删除用户
+	guest菜单：修改密码，退出，查询自己信息
+服务器（server文件夹）：采用回环地址 127.0.0.1 设计并发服务器模型，处理客户端命令请求
+	user.db数据库文件，内含2张表，user和info，作用同上
+	server.c服务器的处理框架，这里把guest用户和root用户请求命令统一处理，服务器不区分权限，
+	root和guest权限是在客户端设置的
+	deal.c存放每个命令对应的处理函数
+
+typedef struct 
+{
+	int user_commend;//guest命令 1修改 2退出 3查询 root命令：4，修改   5，退出  6，查询   7，新增用户  8，删除用户
+	int login_success_flag; //标志用户是否存在或登陆是否成功，1成功或存在 2失败或用户不存在
+	int login_regi_flag;//标志是登陆还是注册命令，1登陆 2注册
+	char  type[10]； //权限标志位  guest普通用户 root管理员用户,只能为guest或root
+	char  name[N];  // 姓名
+	char  password[N]; // 密码
+}USER；
+
+
